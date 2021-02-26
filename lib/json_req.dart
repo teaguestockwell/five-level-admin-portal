@@ -50,6 +50,5 @@ Future<Response> delete1(String ep, Map<String, dynamic> obj) async {
 
 List<dynamic> parseJsonIsolate(String json) {
   final ret = jsonDecode(json) as List<dynamic>;
-  print('json decoded' + ret.toString());
   return ret;
 }

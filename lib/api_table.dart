@@ -16,7 +16,6 @@ class APITable extends StatefulWidget {
 }
 
 class _APITableState extends State<APITable> {
-
   void delete(Map<String, dynamic> obj) async {
     final res = await delete1(this.widget.ep, obj);
     if (res.statusCode == 200) {
@@ -27,9 +26,7 @@ class _APITableState extends State<APITable> {
     }
   }
 
-  void edit(Map<String, dynamic> obj) async {
-    
-  }
+  void edit(Map<String, dynamic> obj) async {}
 
   void showError(String error) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -47,7 +44,11 @@ class _APITableState extends State<APITable> {
                 builder: (context, sh) {
                   if (sh.data != null && sh.data.length != 0) {
                     List<dynamic> jsonList = sh.data;
-                    return JsonList(jsonList: jsonList, ep: this.widget.ep, delete: delete, edit: edit);
+                    return JsonList(
+                        jsonList: jsonList,
+                        ep: this.widget.ep,
+                        delete: delete,
+                        edit: edit);
                   } else {
                     return CircularProgressIndicator();
                   }

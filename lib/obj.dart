@@ -1,4 +1,3 @@
-
 abstract class APIRequestable {
   Map<String, dynamic> getJsonShallow();
   Map<String, dynamic> setJsonShallow();

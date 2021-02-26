@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'tex.dart';
 
 class DataTableT extends StatefulWidget {
-  final List<Map<String,String>> jsonList;
+  final List<Map<String, String>> jsonList;
   DataTableT(this.jsonList);
   @override
   _DataTableTState createState() => _DataTableTState();
@@ -14,14 +14,16 @@ class _DataTableTState extends State<DataTableT> {
   num counter = 0.0;
   Timer t;
   @override
-  initState(){
+  initState() {
     super.initState();
-    t= Timer.periodic(Duration(milliseconds: 100),tick);
+    t = Timer.periodic(Duration(milliseconds: 100), tick);
   }
 
-  void tick(_){ 
-    counter+= 100;
-    if(counter%1000 == 0){print(counter);}
+  void tick(_) {
+    counter += 100;
+    if (counter % 1000 == 0) {
+      print(counter);
+    }
   }
 
   List<DataColumn> getColumns() {
@@ -53,11 +55,7 @@ class _DataTableTState extends State<DataTableT> {
       });
 
       cells.add(DataCell(Row(children: [
-        IconButton(
-            icon: Icon(IconData(59043)),
-            onPressed: () {
-        
-            }),
+        IconButton(icon: Icon(IconData(59043)), onPressed: () {}),
         Icon(IconData(57623))
       ])));
       //cells.add(DataCell(IconButton(icon: Icon(IconData(59043)), onPressed: (){delete(map);},)));
@@ -69,9 +67,9 @@ class _DataTableTState extends State<DataTableT> {
 
   @override
   Widget build(BuildContext context) {
-     WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       // ignore: invalid_use_of_protected_member,invalid_use_of_visible_for_testing_member
-      print(counter/1000);
+      print(counter / 1000);
     });
     counter = 0.0;
     return SingleChildScrollView(
