@@ -1,20 +1,18 @@
-import 'package:flutter/foundation.dart';
 
 abstract class APIRequestable {
-  Map<String,dynamic> getJsonShallow();
-  Map<String,dynamic> setJsonShallow();
+  Map<String, dynamic> getJsonShallow();
+  Map<String, dynamic> setJsonShallow();
   bool isFieldValidAtI(int i);
   bool isObjValid();
   final String description;
   final String getN;
   final String put1;
   final String delete1;
-  APIRequestable({
-    this.description = '',
-    this.getN = '',
-    this.put1 = '',
-    this.delete1 = ''
-  });
+  APIRequestable(
+      {this.description = '',
+      this.getN = '',
+      this.put1 = '',
+      this.delete1 = ''});
 }
 
 class Cargo extends APIRequestable {
@@ -42,5 +40,4 @@ class Cargo extends APIRequestable {
     // TODO: implement setJsonShallow
     throw UnimplementedError();
   }
-
 }

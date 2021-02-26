@@ -1,17 +1,29 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'tex.dart';
 
-typedef void DeleteFunction(Map<String, dynamic> obj);
-
-class JsonTable extends StatefulWidget {
-  final List<dynamic> jsonList;
-  final DeleteFunction delete;
-  JsonTable(this.jsonList, this.delete);
+class DataTableT extends StatefulWidget {
+  final List<Map<String,String>> jsonList;
+  DataTableT(this.jsonList);
   @override
-  _JsonTableState createState() => _JsonTableState();
+  _DataTableTState createState() => _DataTableTState();
 }
 
-class _JsonTableState extends State<JsonTable> {
+class _DataTableTState extends State<DataTableT> {
+  num counter = 0.0;
+  Timer t;
+  @override
+  initState(){
+    super.initState();
+    t= Timer.periodic(Duration(milliseconds: 100),tick);
+  }
+
+  void tick(_){ 
+    counter+= 100;
+    if(counter%1000 == 0){print(counter);}
+  }
+
   List<DataColumn> getColumns() {
     final ret = <DataColumn>[];
     final Map<String, dynamic> jsonMap = this.widget.jsonList[0];
@@ -44,7 +56,7 @@ class _JsonTableState extends State<JsonTable> {
         IconButton(
             icon: Icon(IconData(59043)),
             onPressed: () {
-              this.widget.delete(map);
+        
             }),
         Icon(IconData(57623))
       ])));
@@ -57,6 +69,11 @@ class _JsonTableState extends State<JsonTable> {
 
   @override
   Widget build(BuildContext context) {
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // ignore: invalid_use_of_protected_member,invalid_use_of_visible_for_testing_member
+      print(counter/1000);
+    });
+    counter = 0.0;
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: SingleChildScrollView(

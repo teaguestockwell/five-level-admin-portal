@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class Tex extends StatelessWidget {
   final String x;
-  Tex(this.x): super(key: UniqueKey());
+  Tex(this.x) : super(key: UniqueKey());
   @override
   Widget build(BuildContext context) {
     return Text(
