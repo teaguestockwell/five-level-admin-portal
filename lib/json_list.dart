@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'rounded_input.dart';
 import 'tex.dart';
@@ -26,7 +24,6 @@ class JsonList extends StatefulWidget {
 class _JsonListState extends State<JsonList> {
   List<dynamic> jsonListSearched;
   List<String> goodKeys;
-
   var search;
 
   @override

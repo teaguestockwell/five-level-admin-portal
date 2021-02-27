@@ -77,8 +77,15 @@ class _AdminPanelState extends State<AdminPanel> {
                       child: ListView.builder(
                           itemCount: menuItems.length,
                           itemBuilder: (_, i) {
+                            if(i == menuId){
+                              return ListTile(
+                                title: Text(menuItems[i], style: TextStyle(fontWeight: FontWeight.bold)),
+                                onTap: () {
+                                  panelTapped(i);
+                                });
+                            }
                             return ListTile(
-                                title: Tex(menuItems[i]),
+                                title: Text(menuItems[i]),
                                 onTap: () {
                                   panelTapped(i);
                                 });
