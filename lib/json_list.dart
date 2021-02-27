@@ -24,7 +24,7 @@ class JsonList extends StatefulWidget {
 }
 
 class _JsonListState extends State<JsonList> {
-  var jsonListSearched;
+  List<dynamic> jsonListSearched;
   List<String> goodKeys;
 
   var search;
@@ -64,17 +64,11 @@ class _JsonListState extends State<JsonList> {
   }
 
   void onSearch(String text) {
-    if(text == ''){
-      jsonListSearched = List<dynamic>.from(this.widget.jsonList);
+    if(text.isEmpty){
+      setState(()=>jsonListSearched = List<dynamic>.from(this.widget.jsonList));
     } else{
-      setState(()=> jsonListSearched = this.widget.jsonList.where((x) => test(x,text)));
+      setState(()=> jsonListSearched = this.widget.jsonList.where((x) => x['name'].toUpperCase().contains(text.toUpperCase())).toList());
     }
-  }
-
-  bool test(dynamic x, String searchText){
-    Map<String,dynamic> map = x;
-    print(map);
-    return false;
   }
 
   Widget buildRow(int i) {
@@ -93,7 +87,7 @@ class _JsonListState extends State<JsonList> {
           child: Container(
               width: 25,
               height: 60,
-              child: Align(alignment: Alignment.centerLeft, child: Tex(s)))));
+              child: Align(alignment: Alignment.centerLeft, child: Tex(s.capitalize())))));
     });
 
     if (map != null) {
