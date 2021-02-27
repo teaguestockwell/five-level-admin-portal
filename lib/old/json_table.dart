@@ -1,38 +1,23 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'tex.dart';
 
-class DataTableT extends StatefulWidget {
-  final List<Map<String, String>> jsonList;
-  DataTableT(this.jsonList);
+typedef void DeleteFunction(Map<String, dynamic> obj);
+
+class JsonTable extends StatefulWidget {
+  final List<dynamic> jsonList;
+  final DeleteFunction delete;
+  JsonTable(this.jsonList, this.delete);
   @override
-  _DataTableTState createState() => _DataTableTState();
+  _JsonTableState createState() => _JsonTableState();
 }
 
-class _DataTableTState extends State<DataTableT> {
-  num counter = 0.0;
-  Timer t;
-  @override
-  initState() {
-    super.initState();
-    t = Timer.periodic(Duration(milliseconds: 100), tick);
-  }
-
-  void tick(_) {
-    counter += 100;
-    if (counter % 1000 == 0) {
-      print(counter);
-    }
-  }
-
+class _JsonTableState extends State<JsonTable> {
   List<DataColumn> getColumns() {
     final ret = <DataColumn>[];
     final Map<String, dynamic> jsonMap = this.widget.jsonList[0];
 
     jsonMap.keys.forEach((key) {
       if (!key.contains('id')) {
-        ret.add(DataColumn(label: Tex(key)));
+        ret.add(DataColumn(label: Text(key)));
       }
     });
 
@@ -50,12 +35,16 @@ class _DataTableTState extends State<DataTableT> {
       final cells = <DataCell>[];
       map.forEach((key, val) {
         if (!key.contains('id')) {
-          cells.add(DataCell(Tex(val.toString())));
+          cells.add(DataCell(Text(val.toString())));
         }
       });
 
       cells.add(DataCell(Row(children: [
-        IconButton(icon: Icon(IconData(59043)), onPressed: () {}),
+        IconButton(
+            icon: Icon(IconData(59043)),
+            onPressed: () {
+              this.widget.delete(map);
+            }),
         Icon(IconData(57623))
       ])));
       //cells.add(DataCell(IconButton(icon: Icon(IconData(59043)), onPressed: (){delete(map);},)));
@@ -67,11 +56,6 @@ class _DataTableTState extends State<DataTableT> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // ignore: invalid_use_of_protected_member,invalid_use_of_visible_for_testing_member
-      print(counter / 1000);
-    });
-    counter = 0.0;
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: SingleChildScrollView(

@@ -36,22 +36,19 @@ class _APITableState extends State<APITable> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.all(5),
-        child: Center(
-            child: FutureBuilder<List<dynamic>>(
-                future: getN(this.widget.ep, reqParam: this.widget.reqParam),
-                builder: (context, sh) {
-                  if (sh.data != null && sh.data.length != 0) {
-                    List<dynamic> jsonList = sh.data;
-                    return JsonList(
-                        jsonList: jsonList,
-                        ep: this.widget.ep,
-                        delete: delete,
-                        edit: edit);
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                })));
+    return FutureBuilder<List<dynamic>>(
+        future: getN(this.widget.ep, reqParam: this.widget.reqParam),
+        builder: (context, sh) {
+          if (sh.data != null && sh.data.length != 0) {
+            List<dynamic> jsonList = sh.data;
+            return JsonList(
+                jsonList: jsonList,
+                ep: this.widget.ep,
+                delete: delete,
+                edit: edit);
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
   }
 }

@@ -6,6 +6,7 @@ Search bar filter List<Map<String,dynamic>> into another [] based on Map[] based
 Title above table
 
 How can i diffrentate between the ep while still keepping tables dynmaic 
+
 {
   New Buttons
 
