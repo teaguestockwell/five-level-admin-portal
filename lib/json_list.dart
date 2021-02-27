@@ -1,5 +1,7 @@
-import 'package:admin/rounded_input.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'rounded_input.dart';
 import 'tex.dart';
 
 typedef void FunParaMap(Map<String, dynamic> map);
@@ -22,37 +24,63 @@ class JsonList extends StatefulWidget {
 }
 
 class _JsonListState extends State<JsonList> {
+  var jsonListSearched;
+  List<String> goodKeys;
+
   var search;
 
   @override
   void initState() {
     super.initState();
 
+    jsonListSearched = List<dynamic>.from(this.widget.jsonList);
+
+   filter();
+
     search = RoundedInputField(
       height: 30,
       widthMultiplier: .55,
       hintText: 'Search Name',
       icon: IconData(59828, fontFamily: 'MaterialIcons'),
-      onChanged: onChanged,
+      onChanged: onSearch,
       editTextBackgroundColor: Color.fromRGBO(240, 240, 240, 1),
     );
   }
 
-  void onChanged(String text) {
-    print(text);
+  void filter(){
+    if(this.widget.jsonList != null && this.widget.jsonList.length > 0){
+      Map<String,dynamic> map = this.widget.jsonList[0];
+      final ret = <String>[];
+
+      final keys1 = map.keys.where((k) => !k.contains('id')).toList();
+      final keys2 = keys1.where((k) => map[k].toString().length < 50).toList();
+
+      if(keys2.length > 5){
+        goodKeys = keys2.sublist(0,5);
+      } else{
+        goodKeys = keys2;
+      }
+    }
+  }
+
+  void onSearch(String text) {
+    if(text == ''){
+      jsonListSearched = List<dynamic>.from(this.widget.jsonList);
+    } else{
+      setState(()=> jsonListSearched = this.widget.jsonList.where((x) => test(x,text)));
+    }
+  }
+
+  bool test(dynamic x, String searchText){
+    Map<String,dynamic> map = x;
+    print(map);
+    return false;
   }
 
   Widget buildRow(int i) {
-    final Map<String, dynamic> map = this.widget.jsonList[i];
-    final strings = <String>[];
-
-    map.forEach((key, value) {
-      if (!key.contains('id')) {
-        strings.add(value.toString());
-      }
-    });
-
-    return getRow(strings, map: map);
+    final Map<String, dynamic> map = jsonListSearched[i];
+    final values = goodKeys.map((k) => map[k].toString()).toList();
+    return getRow(values, map: map);
   }
 
   Widget getRow(List<String> strings, {Map<String, dynamic> map}) {
@@ -100,25 +128,14 @@ class _JsonListState extends State<JsonList> {
       ret.add(Container(width: 25));
       ret.add(Container(width: 25));
     }
-
     ret.add(Spacer());
-
     return Row(children: ret);
   }
 
   Widget buildTitle() {
-    final Map<String, dynamic> map = this.widget.jsonList[0];
-    final strings = <String>[];
-
-    map.keys.forEach((key) {
-      if (!key.contains('id')) {
-        strings.add(key.capitalize());
-      }
-    });
-
     return Container(
       height: 58,
-      child: getRow(strings),
+      child: getRow(goodKeys),
       decoration: BoxDecoration(
           color: Color.fromRGBO(233, 233, 233, 1),
           borderRadius: BorderRadius.all(Radius.circular(3))),
@@ -140,14 +157,13 @@ class _JsonListState extends State<JsonList> {
 
       Flexible(
         child: ListView.separated(
+          itemCount: jsonListSearched.length,
           itemBuilder: (_, i) => buildRow(i),
-          itemCount: this.widget.jsonList.length,
           separatorBuilder: (_, x) => Divider(
             thickness: 2,
           ),
         ),
       )
-
     ]);
   }
 }

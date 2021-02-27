@@ -49,7 +49,7 @@ class _AdminPanelState extends State<AdminPanel> {
     return Container(
         child: Row(children: [
       Container(
-          width: 250,
+          width: 175,
           child: Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Padding(
@@ -97,7 +97,7 @@ class _AdminPanelState extends State<AdminPanel> {
             child: Align(
               alignment: Alignment.topCenter,
               child: Container(
-                  width: 300,
+                  width: 200,
                   height: 50,
                   child: Center(
                       child: Text(menuItems[menuId],
