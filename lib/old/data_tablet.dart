@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-
 class DataTableT extends StatefulWidget {
   final List<Map<String, String>> jsonList;
   DataTableT(this.jsonList);

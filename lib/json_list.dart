@@ -127,27 +127,27 @@ class _JsonListState extends State<JsonList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Padding(padding: EdgeInsets.only(bottom: 20),child:search),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+
+      Padding(
+        padding: EdgeInsets.only(bottom: 20),
+        child: search
+      ),
+
+      buildTitle(),
+
       Flexible(
         child: ListView.separated(
-          itemCount: this.widget.jsonList.length + 1,
-          separatorBuilder: (_, i) {
-            if (i != 0) {
-              return Divider(
-                thickness: 2,
-              );
-            }
-            return Container();
-          },
-          itemBuilder: (_, i) {
-            if (i == 0) {
-              return buildTitle();
-            }
-            return buildRow(i - 1);
-          },
+          itemBuilder: (_, i) => buildRow(i),
+          itemCount: this.widget.jsonList.length,
+          separatorBuilder: (_, x) => Divider(
+            thickness: 2,
+          ),
         ),
       )
+
     ]);
   }
 }

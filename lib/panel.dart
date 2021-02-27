@@ -101,15 +101,16 @@ class _AdminPanelState extends State<AdminPanel> {
                   height: 50,
                   child: Center(
                       child: Text(menuItems[menuId],
-                          style: TextStyle(fontFamily: 'DMSans', fontSize: 36)))),
+                          style:
+                              TextStyle(fontFamily: 'DMSans', fontSize: 36)))),
             ),
           ),
           Flexible(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: APITable(epS[menuId],
-                    reqParam: {'aircraftid': airId.toString()}),
-              )),
+            padding: const EdgeInsets.all(20.0),
+            child: APITable(epS[menuId],
+                reqParam: {'aircraftid': airId.toString()}),
+          )),
         ],
       ))
     ]));
