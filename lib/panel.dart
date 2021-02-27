@@ -91,16 +91,18 @@ class _AdminPanelState extends State<AdminPanel> {
           )),
       Flexible(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Container(
-                width: 300,
-                height: 50,
-                child: Center(
-                    child: Text(menuItems[menuId],
-                        style: TextStyle(fontFamily: 'DMSans', fontSize: 36)))),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                  width: 300,
+                  height: 50,
+                  child: Center(
+                      child: Text(menuItems[menuId],
+                          style: TextStyle(fontFamily: 'DMSans', fontSize: 36)))),
+            ),
           ),
           Flexible(
               child: Padding(
