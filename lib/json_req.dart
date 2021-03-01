@@ -33,7 +33,7 @@ List<dynamic> parseJsonIsolate(String json) {
   return ret;
 }
 
-String getQueryString(Map<String,String> reqParam) {
+String getQueryString(Map<String,dynamic> reqParam) {
   String queryString ='?';
 
   reqParam.removeWhere((k,v) => !k.contains('id'));

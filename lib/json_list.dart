@@ -105,36 +105,27 @@ class _JsonListState extends State<JsonList> {
     });
 
     if (map != null) {
-      ret.add(Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Container(
-            width: 25,
-            height: 35,
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                    icon: Icon(IconData(59043, fontFamily: 'MaterialIcons')),
-                    onPressed: () {
-                      this.widget.delete(map);
-                    }))),
+      ret.add(Container(
+        width: 35,
+        height:35,
+        child: IconButton(
+          icon: Icon(IconData(59043, fontFamily: 'MaterialIcons')),
+          onPressed: () {this.widget.delete(map);}
+        ),
       ));
 
-      ret.add(Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Container(
-            width: 25,
-            height: 35,
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                    icon: Icon(IconData(57623, fontFamily: 'MaterialIcons')),
-                    onPressed: () {
-                      this.widget.edit(map);
-                    }))),
+      ret.add(Container(
+        width: 35,
+        height:35,
+        child: IconButton(
+          icon: Icon(IconData(57623, fontFamily: 'MaterialIcons')),
+          onPressed: () {this.widget.edit(map);}
+        ),
       ));
+
     } else {
-      ret.add(Container(width: 25));
-      ret.add(Container(width: 25));
+      ret.add(Container(width: 35));
+      ret.add(Container(width: 35));
     }
     ret.add(Spacer());
     return Row(children: ret);

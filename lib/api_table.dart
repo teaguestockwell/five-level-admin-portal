@@ -110,6 +110,7 @@ class _APITableState extends State<APITable> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<dynamic>>(
+        key: UniqueKey(),
         future: getN(epState, reqParam: reqParamState),
         builder: (context, sh) {
           if (sh.data != null && sh.data.length != 0) {
