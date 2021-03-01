@@ -1,3 +1,4 @@
+import 'package:admin/panel.dart';
 import 'package:flutter/material.dart';
 
 class RoundedInputField extends StatelessWidget {
@@ -37,6 +38,7 @@ class RoundedInputField extends StatelessWidget {
         borderRadius: BorderRadius.circular(29),
       ),
       child: TextField(
+        style: dmDisabled,
         controller: textEditingController,
         onChanged: onChanged,
         cursorColor: cursorColor,

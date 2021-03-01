@@ -1,3 +1,5 @@
+import 'package:admin/panel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'rounded_input.dart';
 import 'tex.dart';
@@ -22,9 +24,16 @@ class JsonList extends StatefulWidget {
 }
 
 class _JsonListState extends State<JsonList> {
+  final sc = ScrollController();
   List<dynamic> jsonListSearched;
   List<String> goodKeys;
   var search;
+
+  @override
+  void dispose() {
+    sc.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -84,7 +93,7 @@ class _JsonListState extends State<JsonList> {
           child: Container(
               width: 25,
               height: 60,
-              child: Align(alignment: Alignment.centerLeft, child: Tex(s.capitalize())))));
+              child: Align(alignment: Alignment.centerLeft, child: Text(s.capitalize(), style: dmbody1)))));
     });
 
     if (map != null) {
@@ -147,11 +156,17 @@ class _JsonListState extends State<JsonList> {
       buildTitle(),
 
       Flexible(
-        child: ListView.separated(
-          itemCount: jsonListSearched.length,
-          itemBuilder: (_, i) => buildRow(i),
-          separatorBuilder: (_, x) => Divider(
-            thickness: 2,
+        child: CupertinoScrollbar(
+          thickness: 5,
+          controller: sc,
+          isAlwaysShown: true,
+          child: ListView.separated(
+            controller: sc,
+            itemCount: jsonListSearched.length,
+            itemBuilder: (_, i) => buildRow(i),
+            separatorBuilder: (_, x) => Divider(
+              thickness: 2,
+            ),
           ),
         ),
       )

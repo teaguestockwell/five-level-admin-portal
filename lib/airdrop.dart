@@ -1,3 +1,4 @@
+import 'package:admin/panel.dart';
 import 'package:flutter/material.dart';
 import 'json_list.dart';
 import 'json_req.dart';
@@ -55,7 +56,7 @@ class DropDownState extends State<DropDown> {
     airs.forEach((k, v) => items.add(DropdownMenuItem(
           key: UniqueKey(),
           value: k,
-          child: Tex(k),
+          child: Text(k, style: dmDisabled),
           onTap: () {
             this.widget.onChange({k: v});
           },
@@ -71,13 +72,16 @@ class DropDownState extends State<DropDown> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      child: DropdownButton(
-        isExpanded: true,
-        value: _selectedAir,
-        items: _dropdownMenuItems,
-        onChanged: onChangeDropdownItem,
+    return Padding(
+      padding: const EdgeInsets.only(right: 20),
+      child: Container(
+        height: 50,
+        child: DropdownButton(
+          isExpanded: true,
+          value: _selectedAir,
+          items: _dropdownMenuItems,
+          onChanged: onChangeDropdownItem,
+        ),
       ),
     );
   }

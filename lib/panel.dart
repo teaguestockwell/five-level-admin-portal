@@ -1,7 +1,15 @@
 import 'package:admin/tex.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'airdrop.dart';
 import 'api_table.dart';
+
+TextStyle dmSelected = GoogleFonts.dmSans(color:Color.fromRGBO(56,56,56,1),fontSize: 14.0,fontWeight: FontWeight.bold);
+TextStyle dmDisabled = GoogleFonts.dmSans(color:Color.fromRGBO(151,151,151,1),fontSize: 14.0,fontWeight: FontWeight.normal);
+TextStyle dmTitle2 = GoogleFonts.dmSans(color:Color.fromRGBO(56,56,56,1),fontSize: 18.0, fontWeight: FontWeight.bold);
+TextStyle dmTitle1 = GoogleFonts.dmSans(color:Color.fromRGBO(56,56,56,1),fontSize: 36.0, fontWeight: FontWeight.bold);
+TextStyle dmbody1 = GoogleFonts.dmSans(color:Color.fromRGBO(51,51,51,1),fontSize: 16.0, fontWeight: FontWeight.normal);
+
 
 class AdminPanel extends StatefulWidget {
   @override
@@ -49,7 +57,18 @@ class _AdminPanelState extends State<AdminPanel> {
     return Container(
         child: Row(children: [
       Container(
-          width: 175,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                spreadRadius: 3,
+                blurRadius: 3,
+                offset: Offset(0, 2), // changes position of shadow
+              ),
+            ],
+          ),
+          width: 250,
           child: Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Padding(
@@ -59,18 +78,14 @@ class _AdminPanelState extends State<AdminPanel> {
                 children: [
                   Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Aircraft Type',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold))),
+                      child: Text('Aircraft Type',style: dmTitle2)),
                   Padding(
                     padding: const EdgeInsets.only(left: 15),
                     child: Align(alignment: Alignment.centerLeft, child: drop),
                   ),
                   Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Master Settings',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold))),
+                      child: Text('Master Settings',style: dmTitle2)),
                   Flexible(
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15),
@@ -79,13 +94,14 @@ class _AdminPanelState extends State<AdminPanel> {
                           itemBuilder: (_, i) {
                             if(i == menuId){
                               return ListTile(
-                                title: Text(menuItems[i], style: TextStyle(fontWeight: FontWeight.bold)),
+                                title: Text(menuItems[i], style: dmSelected),
                                 onTap: () {
                                   panelTapped(i);
                                 });
                             }
                             return ListTile(
-                                title: Text(menuItems[i]),
+                              hoverColor: Colors.amber,
+                                title: Text(menuItems[i], style: dmDisabled),
                                 onTap: () {
                                   panelTapped(i);
                                 });
@@ -107,14 +123,12 @@ class _AdminPanelState extends State<AdminPanel> {
                   width: 200,
                   height: 50,
                   child: Center(
-                      child: Text(menuItems[menuId],
-                          style:
-                              TextStyle(fontFamily: 'DMSans', fontSize: 36)))),
+                      child: Text(menuItems[menuId],style: dmTitle1))),
             ),
           ),
           Flexible(
               child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(48.0),
             child: APITable(epS[menuId],
                 reqParam: {'aircraftid': airId.toString()}),
           )),
