@@ -17,8 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(body: 
-      AdminPanel()
+        home: Scaffold(body: AdminPanel()
             //Center(child:AirDrop(onTap))
             ));
   }

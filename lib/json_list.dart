@@ -40,7 +40,7 @@ class _JsonListState extends State<JsonList> {
 
     jsonListSearched = List<dynamic>.from(this.widget.jsonList);
 
-   filter();
+    filter();
 
     search = RoundedInputField(
       height: 30,
@@ -52,9 +52,9 @@ class _JsonListState extends State<JsonList> {
     );
   }
 
-  void filter(){
-    if(this.widget.jsonList != null && this.widget.jsonList.length > 0){
-      Map<String,dynamic> map = this.widget.jsonList[0];
+  void filter() {
+    if (this.widget.jsonList != null && this.widget.jsonList.length > 0) {
+      Map<String, dynamic> map = this.widget.jsonList[0];
       final ret = <String>[];
 
       // dont include key that contain id
@@ -64,23 +64,28 @@ class _JsonListState extends State<JsonList> {
       final keys2 = keys1.where((k) => map[k].toString().length < 50).toList();
 
       // name key will allways be first
-      keys2.removeWhere((x) => x=='name');
+      keys2.removeWhere((x) => x == 'name');
       keys2.insert(0, 'name');
 
       // there will be only 5 keys
-      if(keys2.length > 5){
-        goodKeys = keys2.sublist(0,5);
-      } else{
+      if (keys2.length > 5) {
+        goodKeys = keys2.sublist(0, 5);
+      } else {
         goodKeys = keys2;
       }
     }
   }
 
   void onSearch(String text) {
-    if(text.isEmpty){
-      setState(()=>jsonListSearched = List<dynamic>.from(this.widget.jsonList));
-    } else{
-      setState(()=> jsonListSearched = this.widget.jsonList.where((x) => x['name'].toUpperCase().contains(text.toUpperCase())).toList());
+    if (text.isEmpty) {
+      setState(
+          () => jsonListSearched = List<dynamic>.from(this.widget.jsonList));
+    } else {
+      setState(() => jsonListSearched = this
+          .widget
+          .jsonList
+          .where((x) => x['name'].toUpperCase().contains(text.toUpperCase()))
+          .toList());
     }
   }
 
@@ -93,7 +98,9 @@ class _JsonListState extends State<JsonList> {
   Widget getRow(List<String> strings, {Map<String, dynamic> map}) {
     final ret = <Widget>[];
     strings.forEach((s) {
-      if(map == null){s = s.capitalize();}
+      if (map == null) {
+        s = s.capitalize();
+      }
       ret.add(Spacer());
 
       ret.add(Expanded(
@@ -101,28 +108,31 @@ class _JsonListState extends State<JsonList> {
           child: Container(
               width: 25,
               height: 60,
-              child: Align(alignment: Alignment.centerLeft, child: Text(s, style: dmbody1)))));
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(s, style: dmbody1)))));
     });
 
     if (map != null) {
       ret.add(Container(
         width: 35,
-        height:35,
+        height: 35,
         child: IconButton(
-          icon: Icon(IconData(59043, fontFamily: 'MaterialIcons')),
-          onPressed: () {this.widget.delete(map);}
-        ),
+            icon: Icon(IconData(59043, fontFamily: 'MaterialIcons')),
+            onPressed: () {
+              this.widget.delete(map);
+            }),
       ));
 
       ret.add(Container(
         width: 35,
-        height:35,
+        height: 35,
         child: IconButton(
-          icon: Icon(IconData(57623, fontFamily: 'MaterialIcons')),
-          onPressed: () {this.widget.edit(map);}
-        ),
+            icon: Icon(IconData(57623, fontFamily: 'MaterialIcons')),
+            onPressed: () {
+              this.widget.edit(map);
+            }),
       ));
-
     } else {
       ret.add(Container(width: 35));
       ret.add(Container(width: 35));
@@ -143,17 +153,9 @@ class _JsonListState extends State<JsonList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-
-      Padding(
-        padding: EdgeInsets.only(bottom: 20),
-        child: search
-      ),
-
+    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Padding(padding: EdgeInsets.only(bottom: 20), child: search),
       buildTitle(),
-
       Flexible(
         child: CupertinoScrollbar(
           thickness: 5,

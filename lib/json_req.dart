@@ -33,17 +33,17 @@ List<dynamic> parseJsonIsolate(String json) {
   return ret;
 }
 
-String getQueryString(Map<String,dynamic> reqParam) {
-  String queryString ='?';
+String getQueryString(Map<String, dynamic> reqParam) {
+  String queryString = '?';
 
-  reqParam.removeWhere((k,v) => !k.contains('id'));
+  reqParam.removeWhere((k, v) => !k.contains('id'));
 
-   for (int i = 0; i < reqParam.length; i++) {
-      queryString +=
-          '${reqParam.keys.elementAt(i)}=${reqParam.values.elementAt(i)}';
-      if (i != reqParam.length - 1) {
-        queryString += '&';
-      }
+  for (int i = 0; i < reqParam.length; i++) {
+    queryString +=
+        '${reqParam.keys.elementAt(i)}=${reqParam.values.elementAt(i)}';
+    if (i != reqParam.length - 1) {
+      queryString += '&';
     }
-    return queryString;
+  }
+  return queryString;
 }
