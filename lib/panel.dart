@@ -1,4 +1,3 @@
-import 'package:admin/tex.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'airdrop.dart';
@@ -113,27 +112,14 @@ class _AdminPanelState extends State<AdminPanel> {
             ),
           )),
       Flexible(
-          child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                  width: 200,
-                  height: 50,
-                  child: Center(
-                      child: Text(menuItems[menuId],style: dmTitle1))),
+          child: Padding(
+            padding: const EdgeInsets.all(40.0),
+            child: APITable(
+            ep: epS[menuId],
+            reqParam: {'aircraftid': airId.toString()},
+            title: menuItems[menuId]
             ),
-          ),
-          Flexible(
-              child: Padding(
-            padding: const EdgeInsets.all(48.0),
-            child: APITable(epS[menuId],
-                reqParam: {'aircraftid': airId.toString()}),
-          )),
-        ],
-      ))
+          ))
     ]));
   }
 }

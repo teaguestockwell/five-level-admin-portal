@@ -2,7 +2,6 @@ import 'package:admin/panel.dart';
 import 'package:flutter/material.dart';
 import 'json_list.dart';
 import 'json_req.dart';
-import 'tex.dart';
 
 class AirDrop extends StatelessWidget {
   final FunParaMap onChange;

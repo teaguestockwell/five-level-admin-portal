@@ -2,7 +2,6 @@ import 'package:admin/panel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'rounded_input.dart';
-import 'tex.dart';
 
 typedef void FunParaMap(Map<String, dynamic> map);
 
@@ -58,9 +57,17 @@ class _JsonListState extends State<JsonList> {
       Map<String,dynamic> map = this.widget.jsonList[0];
       final ret = <String>[];
 
+      // dont include key that contain id
       final keys1 = map.keys.where((k) => !k.contains('id')).toList();
+
+      // dont include keys that have long values
       final keys2 = keys1.where((k) => map[k].toString().length < 50).toList();
 
+      // name key will allways be first
+      keys2.removeWhere((x) => x=='name');
+      keys2.insert(0, 'name');
+
+      // there will be only 5 keys
       if(keys2.length > 5){
         goodKeys = keys2.sublist(0,5);
       } else{
@@ -86,6 +93,7 @@ class _JsonListState extends State<JsonList> {
   Widget getRow(List<String> strings, {Map<String, dynamic> map}) {
     final ret = <Widget>[];
     strings.forEach((s) {
+      if(map == null){s = s.capitalize();}
       ret.add(Spacer());
 
       ret.add(Expanded(
@@ -93,7 +101,7 @@ class _JsonListState extends State<JsonList> {
           child: Container(
               width: 25,
               height: 60,
-              child: Align(alignment: Alignment.centerLeft, child: Text(s.capitalize(), style: dmbody1)))));
+              child: Align(alignment: Alignment.centerLeft, child: Text(s, style: dmbody1)))));
     });
 
     if (map != null) {

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:admin/panel.dart';
 import 'package:admin/rounded_input.dart';
 import 'package:flutter/material.dart';
-import './api_table.dart';
 import 'airdrop.dart';
 
 void main() {
