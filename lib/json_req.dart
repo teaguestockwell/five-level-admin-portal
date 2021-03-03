@@ -28,6 +28,16 @@ Future<Response> delete1(String ep, Map<String, dynamic> obj) async {
   return await delete(baseurl + ep + getQueryString(obj));
 }
 
+Future<Response> put1(String ep, Map<String,dynamic> obj) async {
+  print(baseurl + ep);print(obj);
+  final stringBody = jsonEncode(obj);
+  return await put(
+    baseurl + ep, 
+    body: stringBody,
+    headers: {"Content-Type": "application/json"}
+  );
+}
+
 List<dynamic> parseJsonIsolate(String json) {
   final ret = jsonDecode(json) as List<dynamic>;
   return ret;

@@ -31,7 +31,9 @@ class AdminPanel extends StatefulWidget {
 
 class _AdminPanelState extends State<AdminPanel> {
   final menuItems = <String>[
-    'General',
+    // this extra space is important becaue all other elements have last
+    // element of string removed dynamiclly because thay are plural
+    'Basic Data ',
     'Cargos',
     'Configs',
     'Tanks',

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import './panel.dart';
 import './json_req.dart';
+import 'edit/base_edit.dart';
 import 'json_list.dart';
 
 class APITable extends StatefulWidget {
@@ -21,6 +22,8 @@ class _APITableState extends State<APITable> {
   String titleState;
   Map<String, String> reqParamState;
   var isNested = false;
+  bool isEditing = false;
+  Map<String,dynamic> editObj;
 
   @override
   void initState() {
@@ -34,19 +37,38 @@ class _APITableState extends State<APITable> {
     final res = await delete1(epState, obj);
     if (res.statusCode == 200) {
       setState(() {});
-      showMsg('Deleted Succsesfully');
+      showMsg('Deleted');
+    } else {
+      showMsg(jsonDecode(res.body)['msg']);
+    }
+  }
+
+  void put(Map<String,dynamic> obj) async {
+    final res = await put1(epState, obj);
+    if (res.statusCode == 200) {
+      setState(() {
+        isEditing = false;
+      });
+      showMsg('Saved');
     } else {
       showMsg(jsonDecode(res.body)['msg']);
     }
   }
 
   void unnest() {
-    setState(() {
-      epState = this.widget.ep;
-      titleState = this.widget.title;
-      reqParamState = this.widget.reqParam;
-      isNested = false;
-    });
+    if(!isEditing){
+      setState(() {
+        epState = this.widget.ep;
+        titleState = this.widget.title;
+        reqParamState = this.widget.reqParam;
+        isNested = false;
+      });
+    }
+    else{
+      setState((){
+      isEditing = false;
+      });
+    }
   }
 
   void edit(Map<String, dynamic> obj) async {
@@ -56,29 +78,46 @@ class _APITableState extends State<APITable> {
 
     if (isConfig) {
       setState(() {
-        epState = 'configcargounnested';
-        titleState = obj['name'];
+        epState = 'configcargo';
+        titleState = obj['name'] + ' Cargos';
         reqParamState = {'configid': '${obj['configid']}'};
         isNested = true;
       });
     } else {
-      print('not nested');
+      print('notnested');
+      setState(() {
+        isEditing = true;
+        editObj = obj;
+      });
+      
     }
   }
 
   void back() {}
 
   List<Widget> getTitle() {
-    if (isNested) {
-      return [
-        IconButton(
-            iconSize: 40.0,
-            icon: Icon(IconData(61563, fontFamily: 'MaterialIcons')),
-            onPressed: unnest),
-        Spacer(flex: 10),
-        Text(titleState, style: dmTitle1),
-        Spacer(flex: 11),
-      ];
+    if (isNested || isEditing) {
+      if(isEditing){
+        return [
+          IconButton(
+              iconSize: 40.0,
+              icon: Icon(IconData(61563, fontFamily: 'MaterialIcons')),
+              onPressed: unnest),
+          Spacer(flex: 10),
+          Text('Edit ${titleState.substring(0,titleState.length-1)}', style: dmTitle1),
+          Spacer(flex: 11),
+        ];
+      } else{
+        return [
+          IconButton(
+              iconSize: 40.0,
+              icon: Icon(IconData(61563, fontFamily: 'MaterialIcons')),
+              onPressed: unnest),
+          Spacer(flex: 10),
+          Text(titleState, style: dmTitle1),
+          Spacer(flex: 11),
+        ];
+      }
     } else {
       return [
         Spacer(),
@@ -103,6 +142,7 @@ class _APITableState extends State<APITable> {
         future: getN(epState, reqParam: reqParamState),
         builder: (context, sh) {
           if (sh.data != null && sh.data.length != 0) {
+            if(!isEditing){
             List<dynamic> jsonList = sh.data;
             return Column(children: [
               Padding(
@@ -116,6 +156,16 @@ class _APITableState extends State<APITable> {
                     edit: edit),
               )
             ]);
+            } else {
+              return Column(children: [
+              Padding(
+                  padding: const EdgeInsets.only(bottom: 40),
+                  child: Row(children: getTitle())),
+              Flexible(
+                child: BaseEdit(editObj, epState, put)
+              )
+            ]);
+            }
           } else {
             return Column(
               children: [

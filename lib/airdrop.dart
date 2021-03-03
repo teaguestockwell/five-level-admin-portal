@@ -17,6 +17,7 @@ class AirDrop extends StatelessWidget {
           if (sh.data != null && sh.data.length != 0) {
             final jsonList = sh.data;
             final airs = <String, dynamic>{};
+            print(airs);
             jsonList.forEach((a) => airs[a['name']] = a['id']);
             return DropDown(airs, onChange);
           } else {
