@@ -29,7 +29,7 @@ class Glossary implements APISerialiable{
       final key = GlobalKey<FormState>();
       return Form(
       key: key,
-      child: ListView(
+      child: SingleChildScrollView(child: Column(
         children: [
 
           EditText(
@@ -50,7 +50,7 @@ class Glossary implements APISerialiable{
             }}
           )
         ]
-      )
+      ))
     );
     }
 }

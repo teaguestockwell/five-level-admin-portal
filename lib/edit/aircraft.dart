@@ -43,14 +43,16 @@ class Aircraft {
         "weight0": weight0,
         "weight1": weight1,
         "cargoweight1": cargoweight1,
-        "lemac": lemac
+        "lemac": lemac,
+        'mac': mac,
+        'mommultiplyer': mommultiplyer,
     };
 
     Widget getForm(){
          final key = GlobalKey<FormState>();
     return Form(
       key: key,
-      child: ListView(
+      child: SingleChildScrollView(child: Column(
         children: [
 
           EditText(
@@ -120,12 +122,14 @@ class Aircraft {
           ),
 
           BlackButton(
-            () { if(key.currentState.validate()){
+            () { 
+              print(key.currentState.validate());
+              if(key.currentState.validate()){
               this.onSave(this.toJson());
             }}
           )
         ]
-      )
+      ))
     );
     }
 }

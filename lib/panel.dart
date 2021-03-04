@@ -58,23 +58,22 @@ class _AdminPanelState extends State<AdminPanel> {
     'user',
     'glossary'
   ];
-  AirDrop drop;
   int airId = 1;
   int menuId = 1;
 
-  @override
-  void initState() {
-    super.initState();
-    drop = AirDrop(airChange);
-  }
+  
 
   void panelTapped(int i) {
     setState(() => menuId = i);
   }
 
-  void airChange(Map<String, dynamic> newAir) {
+  void setAirState(Map<String, dynamic> newAir) {
     print(newAir.values.elementAt(0));
     setState(() => airId = newAir.values.elementAt(0));
+  }
+
+  void rebuild(){
+    setState(() => {});
   }
 
   @override
@@ -111,7 +110,7 @@ class _AdminPanelState extends State<AdminPanel> {
                 
                 Padding(
                   padding: EdgeInsets.only(left: 30, right:30),
-                  child: drop
+                  child: AirDrop(setAirState)
                 )
                 ,
                 Padding(
@@ -150,6 +149,7 @@ class _AdminPanelState extends State<AdminPanel> {
           child: Padding(
         padding: const EdgeInsets.all(40.0),
         child: APITable(
+            rebuildCallback: rebuild,
             airid: airId,
             ep: epS[menuId],
             reqParam: {'aircraftid': airId.toString()},

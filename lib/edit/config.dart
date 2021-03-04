@@ -27,7 +27,7 @@ class Config implements APISerialiable{
   final key = GlobalKey<FormState>();
   return Form(
     key: key,
-    child: ListView(
+    child: SingleChildScrollView(child: Column(
       children: [
 
         EditText(
@@ -43,6 +43,6 @@ class Config implements APISerialiable{
           )
       ]
     )
-  );
+  ));
   }
 }

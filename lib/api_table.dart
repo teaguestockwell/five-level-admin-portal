@@ -17,11 +17,12 @@ import 'edit/user.dart';
 import 'json_list.dart';
 
 class APITable extends StatefulWidget {
+  final void Function() rebuildCallback;
   final String ep;
   final Map<String, String> reqParam;
   final String title;
   final int airid;
-  APITable({@required this.ep, @required this.reqParam, @required this.title, @required this.airid})
+  APITable({@required this.ep, @required this.reqParam, @required this.title, @required this.airid, @required this.rebuildCallback})
       : super(key: UniqueKey());
   @override
   _APITableState createState() => _APITableState();
@@ -52,18 +53,22 @@ class _APITableState extends State<APITable> {
     } else {
       showMsg(jsonDecode(res.body)['msg']);
     }
+    if(obj.containsKey('id')){this.widget.rebuildCallback();}
   }
 
   void put(Map<String,dynamic> obj) async {
+    print(obj);
     final res = await put1(epState, obj);
     if (res.statusCode == 200) {
       setState(() {
         isEditing = false;
       });
       showMsg('Saved');
+      if(obj.containsKey('id')){this.widget.rebuildCallback();}
     } else {
       showMsg(jsonDecode(res.body)['msg']);
     }
+    
   }
 
   void unnest() {
@@ -124,7 +129,6 @@ class _APITableState extends State<APITable> {
       setState(() {
         isEditing = true;
       });
-      
     }
   }
 
@@ -155,13 +159,7 @@ class _APITableState extends State<APITable> {
       onPressed: unnest
     )));
 
-    var addButton;
-    // add aircraft in panel, because it is higher in the state
-    // also basic data is only 1 element long because the entire api table
-    // contains the state of only 1 aircraft at a time
-
-    if(epState != 'aircraft'){
-      addButton = Container(
+    final addButton = Container(
         width: w,
         height: h,
         child: BlackButton(
@@ -169,9 +167,7 @@ class _APITableState extends State<APITable> {
           text:'New ${titleState.substring(0,titleState.length-1)}'
         )
       );
-    } else{
-      addButton = empty;
-    }
+   
 
     // show back button?
     if(isNested || isEditing){
