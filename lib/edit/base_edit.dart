@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +10,7 @@ extension StringExtension on String {
   }
 }
 
-enum InputType{
+enum InputType {
   INT,
   DOUBLE,
   STRING,
@@ -19,33 +18,29 @@ enum InputType{
 }
 
 final inputkeyTypes = {
-    'name': InputType.STRING,
-    'role': InputType.INT,
-    'fs0': InputType.DOUBLE,
-    'fs1': InputType.DOUBLE,
-    'mom0': InputType.DOUBLE,
-    'weight0': InputType.DOUBLE,
-    'weight1': InputType.DOUBLE,
-    'cargoweight1': InputType.DOUBLE,
-    'lemac': InputType.DOUBLE,
-    'mac': InputType.DOUBLE,
-    'mommultiplyer': InputType.DOUBLE,
-    'body': InputType.STRING,
-    'weights': InputType.CSV,
-    'simplemoms': InputType.CSV,
-    'weight': InputType.DOUBLE,
-    'fs': InputType.DOUBLE,
-    'category': InputType.INT,
-    'qty': InputType.INT
+  'name': InputType.STRING,
+  'role': InputType.INT,
+  'fs0': InputType.DOUBLE,
+  'fs1': InputType.DOUBLE,
+  'mom0': InputType.DOUBLE,
+  'weight0': InputType.DOUBLE,
+  'weight1': InputType.DOUBLE,
+  'cargoweight1': InputType.DOUBLE,
+  'lemac': InputType.DOUBLE,
+  'mac': InputType.DOUBLE,
+  'mommultiplyer': InputType.DOUBLE,
+  'body': InputType.STRING,
+  'weights': InputType.CSV,
+  'simplemoms': InputType.CSV,
+  'weight': InputType.DOUBLE,
+  'fs': InputType.DOUBLE,
+  'category': InputType.INT,
+  'qty': InputType.INT
 };
 
-final editableKeys = <String,Iterable<String>>{
-  'user':[
-    'name',
-    'role'
-  ],
-
-  'aircraft':[
+final editableKeys = <String, Iterable<String>>{
+  'user': ['name', 'role'],
+  'aircraft': [
     'name',
     'fs0',
     'mom0',
@@ -57,51 +52,35 @@ final editableKeys = <String,Iterable<String>>{
     'mac',
     'mommultiplyer'
   ],
-
-  'cargo':[
+  'cargo': [
     'name',
     'weight',
     'fs',
     'category',
   ],
-
-  'config':[
+  'config': [
     'name',
   ],
-
-  'configcargo':[
-    'fs',
-    'qty'
-  ],
-
-  'glossary':[
-    'name',
-    'body'
-  ],
-
-  'tank': [
-    'weights',
-    'simplemoms'
-  ]
+  'configcargo': ['fs', 'qty'],
+  'glossary': ['name', 'body'],
+  'tank': ['weights', 'simplemoms']
 };
 
-
-
 class BaseEdit extends StatefulWidget {
-  final Map<String,dynamic> obj;
+  final Map<String, dynamic> obj;
   final String ep;
-  final void Function(Map<String,dynamic>) put;
-  BaseEdit(this.obj, this.ep, this.put): super(key: UniqueKey());
+  final void Function(Map<String, dynamic>) put;
+  BaseEdit(this.obj, this.ep, this.put) : super(key: UniqueKey());
   @override
   _BaseEditState createState() => _BaseEditState();
 }
 
 class _BaseEditState extends State<BaseEdit> {
-  Map<String,dynamic> objState;
+  Map<String, dynamic> objState;
   final sc = ScrollController();
- 
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     objState = Map.from(this.widget.obj);
   }
@@ -112,8 +91,8 @@ class _BaseEditState extends State<BaseEdit> {
     super.dispose();
   }
 
-  dynamic parse(String st, InputType inputT){
-     switch (inputT) {
+  dynamic parse(String st, InputType inputT) {
+    switch (inputT) {
       case InputType.CSV:
         return st;
         break;
@@ -121,7 +100,7 @@ class _BaseEditState extends State<BaseEdit> {
         return int.parse(st);
         break;
       case InputType.DOUBLE:
-      return double.parse(st);
+        return double.parse(st);
         break;
       case InputType.STRING:
         return st;
@@ -129,12 +108,12 @@ class _BaseEditState extends State<BaseEdit> {
     }
   }
 
-  Widget getEditText(int i){
+  Widget getEditText(int i) {
     final key = editableKeys[this.widget.ep].elementAt(i);
     final val = objState[key];
     final inputType = inputkeyTypes[key];
     print('key: ' + key.toString());
-    print('value: '+ val.toString());
+    print('value: ' + val.toString());
 
     return RoundedInputField(
       height: 50.0,
@@ -156,20 +135,16 @@ class _BaseEditState extends State<BaseEdit> {
     //   default:
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       controller: sc,
-      itemCount: editableKeys[this.widget.ep].length+1,
-      itemBuilder: (_,i){
-        if(i == 0){
-          return BlackButton(() => this.widget.put(objState)
-          );
+      itemCount: editableKeys[this.widget.ep].length + 1,
+      itemBuilder: (_, i) {
+        if (i == 0) {
+          return BlackButton(() => this.widget.put(objState));
         }
-        return getEditText(i-1);
+        return getEditText(i - 1);
       },
     );
   }

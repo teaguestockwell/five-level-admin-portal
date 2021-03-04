@@ -17,15 +17,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(body: 
-            AdminPanel()
+        home: Scaffold(body: AdminPanel()
             //Center(child: Aircraft.fromJson({'aircraftid': 1}, (x){print(x.toString());}).getForm())
             //Center(child:AirDrop(onTap))
-        ));
+            ));
   }
 }

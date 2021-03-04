@@ -60,6 +60,12 @@ class _AdminPanelState extends State<AdminPanel> {
   ];
   int airId = 1;
   int menuId = 1;
+  AirDrop drop;
+
+  @override
+  void initState() {
+    drop = AirDrop(setAirState);
+  }
 
   
 
@@ -73,7 +79,7 @@ class _AdminPanelState extends State<AdminPanel> {
   }
 
   void rebuild(){
-    setState(() => {});
+    setState(() => drop = AirDrop(setAirState));
   }
 
   @override
@@ -110,7 +116,7 @@ class _AdminPanelState extends State<AdminPanel> {
                 
                 Padding(
                   padding: EdgeInsets.only(left: 30, right:30),
-                  child: AirDrop(setAirState)
+                  child: drop
                 )
                 ,
                 Padding(

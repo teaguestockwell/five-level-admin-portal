@@ -109,24 +109,25 @@ class BlackButton extends StatelessWidget {
   final void Function() onPressed;
   final String text;
 
-  BlackButton(this.onPressed, {this.text = 'Save'}): super(key: UniqueKey());
+  BlackButton(this.onPressed, {this.text = 'Save'}) : super(key: UniqueKey());
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
-      decoration: 
-      BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-            color: Color.fromRGBO(56,56,56, 1),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Colors.black.withOpacity(0.15),
-            //     spreadRadius: 3,
-            //     blurRadius: 3,
-            //     offset: Offset(0, 2), // changes position of shadow
-            //   ),
-            // ],
-      ),
-      child: FlatButton(onPressed: onPressed,child: Text(text, style: dmSelectedWhiteBold)));
+        height: 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Color.fromRGBO(56, 56, 56, 1),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.black.withOpacity(0.15),
+          //     spreadRadius: 3,
+          //     blurRadius: 3,
+          //     offset: Offset(0, 2), // changes position of shadow
+          //   ),
+          // ],
+        ),
+        child: FlatButton(
+            onPressed: onPressed,
+            child: Text(text, style: dmSelectedWhiteBold)));
   }
 }
