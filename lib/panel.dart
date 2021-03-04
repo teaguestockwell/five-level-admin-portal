@@ -7,6 +7,16 @@ TextStyle dmSelected = GoogleFonts.dmSans(
     color: Color.fromRGBO(56, 56, 56, 1),
     fontSize: 14.0,
     fontWeight: FontWeight.bold);
+TextStyle dmSelectedNormal = GoogleFonts.dmSans(
+color: Color.fromRGBO(56, 56, 56, 1),
+fontSize: 14.0,
+fontWeight: FontWeight.normal);
+
+TextStyle dmSelectedWhiteBold = GoogleFonts.dmSans(
+    color: Colors.white,
+    fontSize: 14.0,
+    fontWeight: FontWeight.bold);
+
 TextStyle dmDisabled = GoogleFonts.dmSans(
     color: Color.fromRGBO(151, 151, 151, 1),
     fontSize: 14.0,
@@ -70,10 +80,11 @@ class _AdminPanelState extends State<AdminPanel> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Row(children: [
+        child: Row(
+          children: [
       Container(
+          //color: Colors.white,
           decoration: BoxDecoration(
-            color: Colors.white,
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.15),
@@ -84,53 +95,62 @@ class _AdminPanelState extends State<AdminPanel> {
             ],
           ),
           width: 250,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Aircraft Type', style: dmTitle2)),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Align(alignment: Alignment.centerLeft, child: drop),
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Master Settings', style: dmTitle2)),
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: ListView.builder(
-                          itemCount: menuItems.length,
-                          itemBuilder: (_, i) {
-                            if (i == menuId) {
-                              return ListTile(
-                                  title: Text(menuItems[i], style: dmSelected),
-                                  onTap: () {
-                                    panelTapped(i);
-                                  });
-                            }
-                            return ListTile(
-                                hoverColor: Colors.amber,
-                                title: Text(menuItems[i], style: dmDisabled),
-                                onTap: () {
-                                  panelTapped(i);
-                                });
-                          }),
-                    ),
-                  ),
-                ],
-              ),
+          child: Material(
+            shadowColor: Colors.black.withOpacity(0.15),
+            child:Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Text('Aircraft Type', style: dmTitle2),
+                ),
+                
+                Padding(
+                  padding: EdgeInsets.only(left: 30, right:30),
+                  child: drop
+                )
+                ,
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Text('Master Settings', style: dmTitle2),
+                ),
+
+                Flexible(
+                  child: ListView.builder(
+                      itemCount: menuItems.length,
+                      itemBuilder: (_, i) {
+                        if (i == menuId) {
+                          return ListTile(
+                              title: Padding(
+                                padding: const EdgeInsets.only(left: 15.0),
+                                child: Text(menuItems[i], style: dmSelected),
+                              ),
+                              onTap: () {
+                                panelTapped(i);
+                              });
+                        }
+                        return ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.only(left: 15.0),
+                              child: Text(menuItems[i], style: dmDisabled),
+                            ),
+                            onTap: () {
+                              panelTapped(i);
+                            });
+                      }),
+                ),
+              ],
             ),
-          )),
+          ))),
       Flexible(
           child: Padding(
         padding: const EdgeInsets.all(40.0),
         child: APITable(
+            airid: airId,
             ep: epS[menuId],
             reqParam: {'aircraftid': airId.toString()},
             title: menuItems[menuId]),

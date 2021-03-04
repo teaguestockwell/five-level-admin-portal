@@ -1,17 +1,27 @@
 import 'dart:convert';
 
+import 'package:admin/edit/aircraft.dart';
+import 'package:admin/rounded_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import './panel.dart';
 import './json_req.dart';
+import 'edit/Config.dart';
+import 'edit/api_serialazable.dart';
 import 'edit/base_edit.dart';
+import 'edit/cargo.dart';
+import 'edit/configcargo.dart';
+import 'edit/glossary.dart';
+import 'edit/tank.dart';
+import 'edit/user.dart';
 import 'json_list.dart';
 
 class APITable extends StatefulWidget {
   final String ep;
   final Map<String, String> reqParam;
   final String title;
-  APITable({@required this.ep, @required this.reqParam, @required this.title})
+  final int airid;
+  APITable({@required this.ep, @required this.reqParam, @required this.title, @required this.airid})
       : super(key: UniqueKey());
   @override
   _APITableState createState() => _APITableState();
@@ -23,7 +33,8 @@ class _APITableState extends State<APITable> {
   Map<String, String> reqParamState;
   var isNested = false;
   bool isEditing = false;
-  Map<String,dynamic> editObj;
+  Map<String, dynamic> editObj;
+  int configIDState;
 
   @override
   void initState() {
@@ -71,60 +82,124 @@ class _APITableState extends State<APITable> {
     }
   }
 
+  void createNew(){
+    final baseMap = {'aircraftid': this.widget.airid};
+    Map<String,dynamic> obj;
+    if(epState == 'configcargo'){
+      baseMap['configid'] = configIDState;
+    }
+
+     switch (epState) {
+      case 'aircraft': edit(Aircraft.fromJson(baseMap,put).toJson());
+      break;
+      case 'cargo':  edit(Cargo.fromJson(baseMap,put).toJson());
+      break;
+      case 'config': edit(Config.fromJson(baseMap,put).toJson());
+      break;
+      case 'tank': edit(Tank.fromJson(baseMap,put).toJson());
+      break;
+      case 'user': edit(User.fromJson(baseMap,put).toJson());
+      break;
+      case 'glossary': edit(Glossary.fromJson(baseMap,put).toJson());
+      break;
+      case 'configcargo': edit(ConfigCargo.fromJson(baseMap,put).toJson());
+    }
+  }
+
   void edit(Map<String, dynamic> obj) async {
-    print(obj);
+    editObj =obj;
 
     final isConfig = obj.containsKey('configcargos');
 
     if (isConfig) {
       setState(() {
+        configIDState = obj['configid'];
+        print(configIDState);
         epState = 'configcargo';
         titleState = obj['name'] + ' Cargos';
         reqParamState = {'configid': '${obj['configid']}'};
         isNested = true;
       });
     } else {
-      print('notnested');
       setState(() {
         isEditing = true;
-        editObj = obj;
       });
       
     }
   }
 
-  void back() {}
+
+  Widget getForm(){
+    switch (epState) {
+      case 'aircraft': return Aircraft.fromJson(editObj,put).getForm();
+      case 'cargo':  return Cargo.fromJson(editObj,put).getForm();
+      case 'config': return Config.fromJson(editObj,put).getForm();
+      case 'tank': return Tank.fromJson(editObj,put).getForm();
+      case 'user': return User.fromJson(editObj,put).getForm();
+      case 'glossary': return Glossary.fromJson(editObj,put).getForm();
+      case 'configcargo': return ConfigCargo.fromJson(editObj,put).getForm();
+      default: return Container();
+    }
+  }
+
+  
 
   List<Widget> getTitle() {
-    if (isNested || isEditing) {
+    final w = 150.0;
+    final h = 40.0;
+    final empty = Container(width: w, height: h);
+
+    final backButton = Container(width: w, height: h, child: Align(alignment: Alignment.centerLeft, child: IconButton(
+      iconSize: 40.0,
+      icon: Icon(IconData(61563, fontFamily: 'MaterialIcons')),
+      onPressed: unnest
+    )));
+
+    var addButton;
+    // add aircraft in panel, because it is higher in the state
+    // also basic data is only 1 element long because the entire api table
+    // contains the state of only 1 aircraft at a time
+
+    if(epState != 'aircraft'){
+      addButton = Container(
+        width: w,
+        height: h,
+        child: BlackButton(
+          createNew,
+          text:'New ${titleState.substring(0,titleState.length-1)}'
+        )
+      );
+    } else{
+      addButton = empty;
+    }
+
+    // show back button?
+    if(isNested || isEditing){
+      // modify title to singular?
       if(isEditing){
         return [
-          IconButton(
-              iconSize: 40.0,
-              icon: Icon(IconData(61563, fontFamily: 'MaterialIcons')),
-              onPressed: unnest),
-          Spacer(flex: 10),
+          backButton,
+          Spacer(),
           Text('Edit ${titleState.substring(0,titleState.length-1)}', style: dmTitle1),
-          Spacer(flex: 11),
-        ];
-      } else{
-        return [
-          IconButton(
-              iconSize: 40.0,
-              icon: Icon(IconData(61563, fontFamily: 'MaterialIcons')),
-              onPressed: unnest),
-          Spacer(flex: 10),
-          Text(titleState, style: dmTitle1),
-          Spacer(flex: 11),
+          Spacer(),
+          empty
         ];
       }
-    } else {
       return [
+        backButton,
         Spacer(),
         Text(titleState, style: dmTitle1),
         Spacer(),
+        addButton
       ];
     }
+    return[
+      empty,
+      Spacer(),
+      Text(titleState, style: dmTitle1),
+      Spacer(),
+      addButton
+    ];
   }
 
   void showMsg(String error) {
@@ -162,7 +237,7 @@ class _APITableState extends State<APITable> {
                   padding: const EdgeInsets.only(bottom: 40),
                   child: Row(children: getTitle())),
               Flexible(
-                child: BaseEdit(editObj, epState, put)
+                child: getForm()
               )
             ]);
             }

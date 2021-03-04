@@ -72,16 +72,13 @@ class DropDownState extends State<DropDown> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 20),
-      child: Container(
-        height: 50,
-        child: DropdownButton(
-          isExpanded: true,
-          value: _selectedAir,
-          items: _dropdownMenuItems,
-          onChanged: onChangeDropdownItem,
-        ),
+    return Container(
+      height: 50,
+      child: DropdownButton(
+        isExpanded: true,
+        value: _selectedAir,
+        items: _dropdownMenuItems,
+        onChanged: onChangeDropdownItem,
       ),
     );
   }

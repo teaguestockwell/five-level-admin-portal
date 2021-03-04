@@ -105,31 +105,28 @@ class RoundedInputField2 extends StatelessWidget {
   }
 }
 
-class SaveButton extends StatelessWidget {
+class BlackButton extends StatelessWidget {
   final void Function() onPressed;
   final String text;
-  final double height;
-  final Color backgroundColor;
-  final double width;
 
-  SaveButton({
-    @required this.onPressed,
-    @required this.text,
-    @required this.backgroundColor,
-    @required this.height,
-    @required this.width
-  }): super(key: UniqueKey());
+  BlackButton(this.onPressed, {this.text = 'Save'}): super(key: UniqueKey());
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
-      margin: EdgeInsets.symmetric(vertical: 10),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      width: width,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(29),
+      height: 50,
+      decoration: 
+      BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+            color: Color.fromRGBO(56,56,56, 1),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.black.withOpacity(0.15),
+            //     spreadRadius: 3,
+            //     blurRadius: 3,
+            //     offset: Offset(0, 2), // changes position of shadow
+            //   ),
+            // ],
       ),
-      child: FlatButton(onPressed: onPressed,child: Text(text, style: dmbody1)));
+      child: FlatButton(onPressed: onPressed,child: Text(text, style: dmSelectedWhiteBold)));
   }
 }

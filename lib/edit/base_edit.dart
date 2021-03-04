@@ -166,12 +166,7 @@ class _BaseEditState extends State<BaseEdit> {
       itemCount: editableKeys[this.widget.ep].length+1,
       itemBuilder: (_,i){
         if(i == 0){
-          return SaveButton(
-            text: 'Save',
-            backgroundColor: Color.fromRGBO(30, 128, 240, 1),
-            width: 150.0,
-            height: 50.0,
-            onPressed: () => this.widget.put(objState)
+          return BlackButton(() => this.widget.put(objState)
           );
         }
         return getEditText(i-1);
