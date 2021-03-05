@@ -81,11 +81,11 @@ class _JsonListState extends State<JsonList> {
       setState(
           () => jsonListSearched = List<dynamic>.from(this.widget.jsonList));
     } else {
-      setState(() => jsonListSearched = this
-          .widget
-          .jsonList
+      setState(
+        () => jsonListSearched = this.widget.jsonList
           .where((x) => x['name'].toUpperCase().contains(text.toUpperCase()))
-          .toList());
+          .toList()
+      );
     }
   }
 

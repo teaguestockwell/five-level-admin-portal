@@ -52,10 +52,10 @@ class Cargo implements APISerialiable {
           EditText(
               initialValue: weight.toString(),
               hintText: 'Weight',
-              validate: (s) => valiadateDoubleAny(s, setWeight)),
+              validate: (s) => valiadateDoublePositive(s, setWeight)),
           EditText(
               initialValue: fs.toString(),
-              hintText: 'Default FS',
+              hintText: 'Default FS (overridden by config)',
               validate: (s) => valiadateDoubleAny(s, setFs)),
           EditText(
               initialValue: category.toString(),

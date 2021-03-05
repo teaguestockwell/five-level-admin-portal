@@ -64,6 +64,7 @@ class _AdminPanelState extends State<AdminPanel> {
 
   @override
   void initState() {
+    super.initState();
     drop = AirDrop(setAirState);
   }
 

@@ -22,7 +22,7 @@ class Glossary implements APISerialiable {
 
   Map<String, dynamic> toJson() => {
         "aircraftid": aircraftid,
-        "userid": glossaryid,
+        "glossaryid": glossaryid,
         "name": name,
         "body": body,
       };
