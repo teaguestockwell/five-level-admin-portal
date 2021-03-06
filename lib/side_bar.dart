@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './util.dart';
 import 'api_request.dart';
 import 'const.dart';
 import 'ep_sheet.dart';
@@ -10,59 +11,40 @@ class SideBar extends StatefulWidget {
 }
 
 class _SideBarState extends State<SideBar> {
-  final menuItems = <String>[
-    'Aircrafts',
-    'Cargos',
-    'Configs',
-    'Tanks',
-    'Users',
-    'Glossarys'
-  ];
-
-  int airId = 1;
-  int menuId = 1;
   FutureDropDownButton drop;
-  int buildCount = 0;
+  int airIdx = 1;
+  int menuIdx = 1;
 
   @override
   void initState() {
     super.initState();
-    drop = FutureDropDownButton(
-      onEmptyMSG: '0 Aircraft',
-      future: getN('aircraft'),
-      onChange: setAirState,
-      apiModelPK: 'id',
-    );
+    drop = getAirDropDown();
   }
 
-  void panelTapped(int i) {
-    setState(() => menuId = i);
-  }
+  void panelTapped(int i) => setState(() => menuIdx = i);
+
+  void rebuild() => setState(() => drop = getAirDropDown());
 
   void setAirState(Map<String, dynamic> newAir) {
-    print(newAir.values.elementAt(0));
-    setState(() => airId = newAir.values.elementAt(0));
-    
+    setState(() => airIdx = newAir.values.elementAt(0));
   }
 
-  void rebuild() {
-    setState(() => 
-      drop = FutureDropDownButton(
-        onEmptyMSG: '0 Aircraft',
-        future: getN('aircraft'),
-        onChange: setAirState,
-        apiModelPK: 'id',
-      )
-    );
-  }
+  String getTitle(int i) => topLvlSPs[i].capitalize()+'s';
+
+  Widget getAirDropDown() => FutureDropDownButton(
+    onEmptyMSG: '0 Aircraft',
+    future: getN(aircraftS),
+    onChange: setAirState,
+    apiModelPK: airPK,
+  );
 
   Widget getTile(int i, double pad){
-    if (i == menuId) {
+    if (i == menuIdx) {
       return ListTile(
         title: Padding(
           padding: EdgeInsets.only(left: pad),
           child:
-              Text(menuItems[i], style: dmSelected),
+              Text(getTitle(i), style: dmSelected),
         ),
         onTap: () {
           panelTapped(i);
@@ -71,7 +53,7 @@ class _SideBarState extends State<SideBar> {
     return ListTile(
       title: Padding(
         padding: EdgeInsets.only(left: pad),
-        child: Text(menuItems[i], style: dmDisabled),
+        child: Text(getTitle(i), style: dmDisabled),
       ),
       onTap: () {
         panelTapped(i);
@@ -80,7 +62,6 @@ class _SideBarState extends State<SideBar> {
 
   @override
   Widget build(_) {
-    buildCount++;
     return Container(
         child: Row(children: [
       Container(
@@ -115,7 +96,7 @@ class _SideBarState extends State<SideBar> {
                       child: drop),
                   Flexible(
                     child: ListView.builder(
-                        itemCount: menuItems.length-1,
+                        itemCount: topLvlSPs.length-1,
                         itemBuilder: (_,i) => getTile(i+1, 15.0),
                   )
                   )
@@ -127,10 +108,10 @@ class _SideBarState extends State<SideBar> {
         padding: const EdgeInsets.all(40.0),
         child: EPSheet(
             rebuildCallback: rebuild,
-            airid: airId,
-            ep: endPoints[menuId],
-            reqParam: {'aircraftid': airId.toString()},
-            title: menuItems[menuId]
+            airid: airIdx,
+            ep: topLvlSPs[menuIdx],
+            reqParam: {topLvlEPPK : airIdx.toString()},
+            title: getTitle(menuIdx)
         ),
       ))
     ]));
