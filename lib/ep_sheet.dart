@@ -45,9 +45,9 @@ class _EPSheetState extends State<EPSheet> {
   /// to its initState before updating
   void create() {
       // pass state of config to model
-      final baseMap = <String, dynamic>{'aircraftid': this.widget.airid};
-      if (epState == 'configcargo') {
-        baseMap['configid'] = configIDState;
+      final baseMap = <String, dynamic>{topLvlEPPK: this.widget.airid};
+      if (epState == configCargosS) {
+        baseMap[configCargoPK] = configIDState;
       }
 
       // map => model => map to set initState
@@ -67,7 +67,7 @@ class _EPSheetState extends State<EPSheet> {
         isPutting = false;
       });
       showMsg('Saved');
-      if (obj.containsKey('id')) {
+      if (obj.containsKey(airPK)) {
         this.widget.rebuildCallback();
       }
     } else {
@@ -83,7 +83,7 @@ class _EPSheetState extends State<EPSheet> {
     } else {
       showMsg(jsonDecode(res.body)['msg']);
     }
-    if (obj.containsKey('id')) {
+    if (obj.containsKey(airPK)) {
       this.widget.rebuildCallback();
     }
   }
@@ -109,12 +109,12 @@ class _EPSheetState extends State<EPSheet> {
   void update(Map<String, dynamic> obj) async {
     editObj = obj;
 
-    if (obj.containsKey('configcargos')) {
+    if (obj.containsKey(configCargosS)) {
       setState(() {
-        configIDState = obj['configid'];
-        epState = 'configcargo';
-        titleState = obj['name'] + ' Cargos';
-        reqParamState = {'configid': '${obj['configid']}'};
+        configIDState = obj[configCargoPK];
+        epState = configCargosS;
+        titleState = obj[searchField] + ' Cargos';
+        reqParamState = {configCargoPK: '${obj[configCargoPK]}'};
         isNested = true;
       });
     } else {
@@ -144,7 +144,7 @@ class _EPSheetState extends State<EPSheet> {
             alignment: Alignment.centerLeft,
             child: IconButton(
                 iconSize: 40.0,
-                icon: Icon(IconData(61563, fontFamily: 'MaterialIcons')),
+                icon: Icon(IconData(61563, fontFamily: matIcons)),
                 onPressed: goBack)));
 
     final addButton = Container(

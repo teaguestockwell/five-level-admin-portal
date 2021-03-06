@@ -21,13 +21,13 @@ class FutureDropDownButton extends StatelessWidget {
         future: future,
         builder: (_,sh) {
           if (sh.data != null && sh.data.length > 0) {
-              return DropDown(
+              return DropDownButton(
                 onChange: onChange,
                 apiModelPK: apiModelPK,
                 initID: initID,
                 map: Map.fromEntries(
                   sh.data.map<MapEntry<String,dynamic>>(
-                    (x) => MapEntry(x['name'],x[apiModelPK]))
+                    (x) => MapEntry(x[searchField],x[apiModelPK]))
                 )
               );
           }  else if(sh.data != null){
@@ -47,13 +47,13 @@ class FutureDropDownButton extends StatelessWidget {
 }
 
 
-class DropDown extends StatefulWidget {
+class DropDownButton extends StatefulWidget {
   final Map<String, dynamic> map;
   final void Function(Map<String, dynamic>) onChange;
   final int initID;
   final String apiModelPK;
 
-  DropDown({
+  DropDownButton({
     @required this.map,
     @required this.onChange,
     @required this.apiModelPK,
@@ -61,10 +61,10 @@ class DropDown extends StatefulWidget {
     }) : super(key: UniqueKey());
 
   @override
-  DropDownState createState() => DropDownState();
+  DropDownButtonState createState() => DropDownButtonState();
 }
 
-class DropDownState extends State<DropDown> {
+class DropDownButtonState extends State<DropDownButton> {
   var _dropdownMenuItems = <DropdownMenuItem<String>>[];
   String selected;
   Map<int, int> pkiDIndexMap = {};

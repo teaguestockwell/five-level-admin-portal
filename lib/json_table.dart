@@ -58,10 +58,10 @@ class _JsonTableState extends State<JsonTable> {
           style: dmDisabled,
           onChanged: onSearch,
           decoration: InputDecoration(
-            hintText: 'Search Name',
+            hintText: 'Search ${searchField.capitalize()}',
             border: InputBorder.none,
             icon: Icon(
-              IconData(59828, fontFamily: 'MaterialIcons'),
+              IconData(59828, fontFamily: matIcons),
             ),
           ),
         ),
@@ -74,7 +74,7 @@ class _JsonTableState extends State<JsonTable> {
     final Map<String, dynamic> map = this.widget.jsonList[0];
 
     // dont include key that contain id
-    final filter0 = map.keys.where((x) => !x.contains('id'));
+    final filter0 = map.keys.where((x) => !x.contains(rmKey));
 
     // dont include keys that have long values
     final filter1 = filter0.where((x) => map[x].toString().length < 50);
@@ -83,7 +83,7 @@ class _JsonTableState extends State<JsonTable> {
     final filter2 = filter1.toList()..sort();
 
     // name will be first key
-    final filter3 = filter2..removeWhere((x) => x=='name')..insert(0, 'name');
+    final filter3 = filter2..removeWhere((x) => x == searchField)..insert(0, searchField);
 
     // there will be a max of 5 keys
     filteredColumns = filter3.take(5).toList();
@@ -109,7 +109,7 @@ class _JsonTableState extends State<JsonTable> {
       height: 35,
       child: IconButton(
         onPressed: () => onPressed(obj),
-        icon: Icon(IconData(iconData, fontFamily: 'MaterialIcons')),
+        icon: Icon(IconData(iconData, fontFamily: matIcons)),
       ),
     );
   }
@@ -123,7 +123,7 @@ class _JsonTableState extends State<JsonTable> {
           .widget
           .jsonList
           .where(
-              (x) => x['name'].toUpperCase().contains(searchText.toUpperCase()))
+              (x) => x[searchField].toUpperCase().contains(searchText.toUpperCase()))
           .toList());
     }
   }

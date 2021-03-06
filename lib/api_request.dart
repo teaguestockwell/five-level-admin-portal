@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-
-final baseurl = 'http://localhost:8080/fl-api/';
+import 'const.dart';
 
 Future<List<dynamic>> getN(String ep, {Map<String, String> reqParam}) async {
   Response res;
@@ -33,7 +32,7 @@ Future<Response> put1(String ep, Map<String, dynamic> obj) async {
   print(obj);
   final stringBody = jsonEncode(obj);
   return await put(baseurl + ep,
-      body: stringBody, headers: {"Content-Type": "application/json"});
+      body: stringBody, headers: reqHeaders);
 }
 
 List<dynamic> parseJsonIsolate(String json) {
@@ -44,7 +43,7 @@ List<dynamic> parseJsonIsolate(String json) {
 String getQueryString(Map<String, dynamic> reqParam) {
   String queryString = '?';
 
-  reqParam.removeWhere((k, v) => !k.contains('id'));
+  reqParam.removeWhere((k, v) => !k.contains(rmKeyQS));
 
   for (int i = 0; i < reqParam.length; i++) {
     queryString +=
