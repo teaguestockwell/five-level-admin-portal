@@ -29,7 +29,7 @@ class _SideBarState extends State<SideBar> {
     setState(() => airIdx = newAir.values.elementAt(0));
   }
 
-  String getTitle(int i) => topLvlSPs[i].capitalize()+'s';
+  String getTitle(int i) => topEPs[i].capitalize()+'s';
 
   Widget getAirDropDown() => FutureDropDownButton(
     onEmptyMSG: '0 Aircraft',
@@ -96,7 +96,7 @@ class _SideBarState extends State<SideBar> {
                       child: drop),
                   Flexible(
                     child: ListView.builder(
-                        itemCount: topLvlSPs.length-1,
+                        itemCount: topEPs.length-1,
                         itemBuilder: (_,i) => getTile(i+1, 15.0),
                   )
                   )
@@ -109,7 +109,7 @@ class _SideBarState extends State<SideBar> {
         child: EPSheet(
             rebuildCallback: rebuild,
             airid: airIdx,
-            ep: topLvlSPs[menuIdx],
+            ep: topEPs[menuIdx],
             reqParam: {topLvlEPPK : airIdx.toString()},
             title: getTitle(menuIdx)
         ),

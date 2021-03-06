@@ -16,6 +16,8 @@ class BlackButton extends StatelessWidget {
         ),
         child: FlatButton(
             onPressed: onPressed,
-            child: Text(text, style: dmSelectedWhiteBold)));
+            child: Text(text, style: dmSelectedWhiteBold)
+        )
+    );
   }
 }

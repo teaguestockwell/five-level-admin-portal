@@ -5,7 +5,7 @@ import '../const.dart';
 class EditText extends StatelessWidget {
   final String hintText;
   final String initialValue;
-  final String Function(String val) validate;
+  final String Function(String) validate;
 
   const EditText({
     Key key,
@@ -21,6 +21,9 @@ class EditText extends StatelessWidget {
       child: TextFormField(
           autovalidateMode: AutovalidateMode.always,
           initialValue: initialValue,
+          validator: validate,
+          keyboardType: TextInputType.text,
+          style: dmSelectedNormal,
           decoration: InputDecoration(
             labelText: hintText,
             fillColor: Color.fromRGBO(240, 240, 240, 1),
@@ -29,9 +32,7 @@ class EditText extends StatelessWidget {
               borderSide: BorderSide(),
             ),
           ),
-          validator: validate,
-          keyboardType: TextInputType.text,
-          style: dmSelectedNormal),
+      ),
     );
   }
 }

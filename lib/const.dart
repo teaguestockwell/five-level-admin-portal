@@ -30,7 +30,7 @@ final dmbody1 = GoogleFonts.dmSans(
     fontSize: 16.0,
     fontWeight: FontWeight.normal);
 
-const topLvlSPs = <String>[
+const topEPs = <String>[
   aircraftS,
   cargoS,
   configS,
@@ -52,12 +52,13 @@ const configS = 'config';
 const tankS = 'tank';
 const userS = 'user';
 const glossaryS = 'glossary';
-const configCargosS = 'configcargos';
+const configCargosS = 'configcargo';
 
 // api model primary keys
 const topLvlEPPK = 'aircraftid';
 const airPK = 'id';
 const configCargoPK = 'configid';
+const configFK = 'configcargos';
 
 /// will be common to all modifiable models,
 /// sorted alabeticly as well

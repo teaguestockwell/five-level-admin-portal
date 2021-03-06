@@ -109,7 +109,7 @@ class _EPSheetState extends State<EPSheet> {
   void update(Map<String, dynamic> obj) async {
     editObj = obj;
 
-    if (obj.containsKey(configCargosS)) {
+    if (obj.containsKey(configFK)) {
       setState(() {
         configIDState = obj[configCargoPK];
         epState = configCargosS;
