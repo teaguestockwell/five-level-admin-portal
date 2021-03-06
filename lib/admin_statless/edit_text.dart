@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../panel.dart';
+import '../const.dart';
+
 
 class EditText extends StatelessWidget {
   final String hintText;

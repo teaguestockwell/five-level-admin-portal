@@ -1,10 +1,10 @@
-import 'package:admin/edit/validate.dart';
 import 'package:flutter/material.dart';
+import '../admin_statless/black_button.dart';
+import '../admin_statless/edit_text.dart';
+import '../util.dart';
+import 'api_serialazable.dart';
 
-import '../rounded_input.dart';
-import 'edit_text.dart';
-
-class Aircraft {
+class Aircraft implements APISerialiable{
   int id;
   String name;
   void setName(String s) => name = s;
@@ -29,6 +29,7 @@ class Aircraft {
   double mommultiplyer;
   void setMomMultiplyer(double s) => mommultiplyer = s;
   void Function(Map<String, dynamic>) onSave;
+  String ep = 'aircraft';
 
   Aircraft.fromJson(Map<String, dynamic> json, this.onSave)
       : id = json["id"] ?? 0,

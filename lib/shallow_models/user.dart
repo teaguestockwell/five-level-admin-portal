@@ -1,26 +1,30 @@
-import 'validate.dart';
 import 'package:flutter/material.dart';
-import '../rounded_input.dart';
+import '../admin_statless/black_button.dart';
+import '../admin_statless/edit_text.dart';
+import '../util.dart';
 import 'api_serialazable.dart';
-import 'edit_text.dart';
 
-class Config implements APISerialiable {
-  int configid;
+class User implements APISerialiable {
   int aircraftid;
+  int userid;
   String name;
   void setName(String s) => name = s;
-  String ep = 'config';
+  int role;
+  void setRole(int s) => role = s;
+  String ep = 'user';
   void Function(Map<String, dynamic> obj) onSave;
 
-  Config.fromJson(Map<String, dynamic> json, this.onSave)
-      : configid = json["configid"] ?? 0,
-        aircraftid = json["aircraftid"],
-        name = json["name"] ?? '';
+  User.fromJson(Map<String, dynamic> json, this.onSave)
+      : aircraftid = json["aircraftid"],
+        userid = json["userid"] ?? 0,
+        name = json["name"] ?? '',
+        role = json["role"] ?? 1;
 
   Map<String, dynamic> toJson() => {
-        "configid": configid,
         "aircraftid": aircraftid,
+        "userid": userid,
         "name": name,
+        "role": role,
       };
 
   Widget getForm() {
@@ -31,8 +35,12 @@ class Config implements APISerialiable {
             child: Column(children: [
           EditText(
               initialValue: name,
-              hintText: 'Name',
+              hintText: 'Email',
               validate: (s) => validateStringNotEmpty(s, setName)),
+          EditText(
+              initialValue: role.toString(),
+              hintText: '0: No Role, 1: User, 2: Admin, 3: DB Admin, 4: Owner',
+              validate: (s) => validateIntPositive(s, setRole)),
           BlackButton(() {
             if (key.currentState.validate()) {
               this.onSave(this.toJson());

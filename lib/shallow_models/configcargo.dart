@@ -1,10 +1,10 @@
-import 'package:admin/edit/validate.dart';
-import 'package:admin/json_req.dart';
 import 'package:flutter/material.dart';
-import '../airdrop.dart';
-import '../rounded_input.dart';
+import '../admin_statless/black_button.dart';
+import '../admin_statless/edit_text.dart';
+import '../api_request.dart';
+import '../future_dropdown_button.dart';
+import '../util.dart';
 import 'api_serialazable.dart';
-import 'edit_text.dart';
 
 class ConfigCargo implements APISerialiable {
   int configid;
@@ -22,7 +22,7 @@ class ConfigCargo implements APISerialiable {
   ConfigCargo.fromJson(Map<String, dynamic> json, this.onSave)
       : configid = json["configid"] ?? 0,
         aircraftid = json["aircraftid"],
-        cargoid = json["cargoid"],
+        cargoid = json["cargoid"] ?? -1,
         configcargoid = json["configcargoid"] ?? 0,
         fs = json["fs"] ?? -1,
         qty = json["qty"] ?? 1,
@@ -36,11 +36,12 @@ class ConfigCargo implements APISerialiable {
         "fs": fs,
         "qty": qty,
         "name": name,
-  };
+      };
 
-  void change(Map<String,dynamic> map){
-   cargoid = map.values.elementAt(0);
-   print(cargoid);
+  void change(Map<String, dynamic> map) {
+    print(map);
+    cargoid = map.values.elementAt(0);
+    print(cargoid);
   }
 
   Widget getForm() {
@@ -49,7 +50,13 @@ class ConfigCargo implements APISerialiable {
         key: key,
         child: SingleChildScrollView(
             child: Column(children: [
-          ConfigCargoDrop(initID: cargoid,future: getN('cargo',reqParam:{'aircraftid': aircraftid.toString()}), onChange:change),
+          FutureDropDownButton(
+            onEmptyMSG: '0 Cargo to connect to config. Try making one',
+              initID: cargoid,
+              future: getN('cargo',reqParam: {'aircraftid': aircraftid.toString()}),
+              onChange: change,
+              apiModelPK: 'cargoid',
+          ),
           EditText(
               initialValue: fs.toString(),
               hintText: 'Fuselage Station',

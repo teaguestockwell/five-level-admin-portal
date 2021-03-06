@@ -1,8 +1,8 @@
-import 'package:admin/edit/validate.dart';
 import 'package:flutter/material.dart';
-import '../rounded_input.dart';
+import '../admin_statless/black_button.dart';
+import '../admin_statless/edit_text.dart';
+import '../util.dart';
 import 'api_serialazable.dart';
-import 'edit_text.dart';
 
 class Glossary implements APISerialiable {
   int aircraftid;

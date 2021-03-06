@@ -1,26 +1,19 @@
 import 'dart:convert';
-
-import 'package:admin/edit/aircraft.dart';
-import 'package:admin/rounded_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import './panel.dart';
-import './json_req.dart';
-import 'edit/Config.dart';
-import 'edit/cargo.dart';
-import 'edit/configcargo.dart';
-import 'edit/glossary.dart';
-import 'edit/tank.dart';
-import 'edit/user.dart';
-import 'json_list.dart';
+import 'admin_statless/black_button.dart';
+import 'api_request.dart';
+import 'const.dart';
+import 'json_table.dart';
+import 'shallow_models/api_serialazable.dart';
 
-class APITable extends StatefulWidget {
+class EPSheet extends StatefulWidget {
   final void Function() rebuildCallback;
   final String ep;
   final Map<String, String> reqParam;
   final String title;
   final int airid;
-  APITable(
+  EPSheet(
       {@required this.ep,
       @required this.reqParam,
       @required this.title,
@@ -28,15 +21,15 @@ class APITable extends StatefulWidget {
       @required this.rebuildCallback})
       : super(key: UniqueKey());
   @override
-  _APITableState createState() => _APITableState();
+  _EPSheetState createState() => _EPSheetState();
 }
 
-class _APITableState extends State<APITable> {
+class _EPSheetState extends State<EPSheet> {
   String epState;
   String titleState;
   Map<String, String> reqParamState;
   var isNested = false;
-  bool isEditing = false;
+  bool isPutting = false;
   Map<String, dynamic> editObj;
   int configIDState;
 
@@ -46,6 +39,40 @@ class _APITableState extends State<APITable> {
     epState = this.widget.ep;
     titleState = this.widget.title;
     reqParamState = this.widget.reqParam;
+  }
+
+  /// create is a wrapper arund update that sets the model
+  /// to its initState before updating
+  void create() {
+      // pass state of config to model
+      final baseMap = <String, dynamic>{'aircraftid': this.widget.airid};
+      if (epState == 'configcargo') {
+        baseMap['configid'] = configIDState;
+      }
+
+      // map => model => map to set initState
+      update(
+        getAPISerializableOfEP(
+          ep: epState,
+          obj: baseMap,
+          put: (_){}
+        ).toJson()
+      );
+  }
+
+  void put(Map<String, dynamic> obj) async {
+    final res = await put1(epState, obj);
+    if (res.statusCode == 200) {
+      setState(() {
+        isPutting = false;
+      });
+      showMsg('Saved');
+      if (obj.containsKey('id')) {
+        this.widget.rebuildCallback();
+      }
+    } else {
+      showMsg(jsonDecode(res.body)['msg']);
+    }
   }
 
   void delete(Map<String, dynamic> obj) async {
@@ -61,24 +88,8 @@ class _APITableState extends State<APITable> {
     }
   }
 
-  void put(Map<String, dynamic> obj) async {
-    print(obj);
-    final res = await put1(epState, obj);
-    if (res.statusCode == 200) {
-      setState(() {
-        isEditing = false;
-      });
-      showMsg('Saved');
-      if (obj.containsKey('id')) {
-        this.widget.rebuildCallback();
-      }
-    } else {
-      showMsg(jsonDecode(res.body)['msg']);
-    }
-  }
-
-  void unnest() {
-    if (!isEditing) {
+  void goBack() {
+    if (!isPutting) {
       setState(() {
         epState = this.widget.ep;
         titleState = this.widget.title;
@@ -87,48 +98,20 @@ class _APITableState extends State<APITable> {
       });
     } else {
       setState(() {
-        isEditing = false;
+        isPutting = false;
       });
     }
   }
 
-  void createNew() {
-    final baseMap = <String,dynamic>{'aircraftid': this.widget.airid};
-    if (epState == 'configcargo') {
-      baseMap['configid'] = configIDState;
-    }
-
-    switch (epState) {
-      case 'aircraft':
-        edit(Aircraft.fromJson(baseMap, put).toJson());
-        break;
-      case 'cargo':
-        edit(Cargo.fromJson(baseMap, put).toJson());
-        break;
-      case 'config':
-        edit(Config.fromJson(baseMap, put).toJson());
-        break;
-      case 'tank':
-        edit(Tank.fromJson(baseMap, put).toJson());
-        break;
-      case 'user':
-        edit(User.fromJson(baseMap, put).toJson());
-        break;
-      case 'glossary':
-        edit(Glossary.fromJson(baseMap, put).toJson());
-        break;
-      case 'configcargo':
-        edit(ConfigCargo.fromJson(baseMap, put).toJson());
-    }
-  }
-
-  void edit(Map<String, dynamic> obj) async {
+  /// Wrapper around isPutting state to determine
+  /// if a pencil click should edit an obj, or nest deeper
+  /// if its a config
+  void update(Map<String, dynamic> obj) async {
     editObj = obj;
 
     if (obj.containsKey('configcargos')) {
       setState(() {
         configIDState = obj['configid'];
-        print(configIDState);
         epState = 'configcargo';
         titleState = obj['name'] + ' Cargos';
         reqParamState = {'configid': '${obj['configid']}'};
@@ -136,30 +119,17 @@ class _APITableState extends State<APITable> {
       });
     } else {
       setState(() {
-        isEditing = true;
+        isPutting = true;
       });
     }
   }
 
   Widget getForm() {
-    switch (epState) {
-      case 'aircraft':
-        return Aircraft.fromJson(editObj, put).getForm();
-      case 'cargo':
-        return Cargo.fromJson(editObj, put).getForm();
-      case 'config':
-        return Config.fromJson(editObj, put).getForm();
-      case 'tank':
-        return Tank.fromJson(editObj, put).getForm();
-      case 'user':
-        return User.fromJson(editObj, put).getForm();
-      case 'glossary':
-        return Glossary.fromJson(editObj, put).getForm();
-      case 'configcargo':
-        return ConfigCargo.fromJson(editObj, put).getForm();
-      default:
-        return Container();
-    }
+    return getAPISerializableOfEP(
+      ep: epState,
+      obj: editObj,
+      put: put
+    ).getForm();
   }
 
   List<Widget> getTitle() {
@@ -175,18 +145,18 @@ class _APITableState extends State<APITable> {
             child: IconButton(
                 iconSize: 40.0,
                 icon: Icon(IconData(61563, fontFamily: 'MaterialIcons')),
-                onPressed: unnest)));
+                onPressed: goBack)));
 
     final addButton = Container(
         width: w,
         height: h,
-        child: BlackButton(createNew,
+        child: BlackButton(create,
             text: 'New ${titleState.substring(0, titleState.length - 1)}'));
 
     // show back button?
-    if (isNested || isEditing) {
+    if (isNested || isPutting) {
       // modify title to singular?
-      if (isEditing) {
+      if (isPutting) {
         return [
           backButton,
           Spacer(),
@@ -229,18 +199,18 @@ class _APITableState extends State<APITable> {
         builder: (context, sh) {
           if (sh.data != null) {
             if (sh.data.length != 0) {
-              if (!isEditing) {
+              if (!isPutting) {
                 List<dynamic> jsonList = sh.data;
                 return Column(children: [
                   Padding(
                       padding: const EdgeInsets.only(bottom: 40),
                       child: Row(children: getTitle())),
                   Flexible(
-                    child: JsonList(
+                    child: JsonTable(
                         jsonList: jsonList,
                         ep: epState,
                         delete: delete,
-                        edit: edit),
+                        edit: update),
                   )
                 ]);
               } else {
@@ -252,7 +222,7 @@ class _APITableState extends State<APITable> {
                 ]);
               }
             }
-            if (isEditing) {
+            if (isPutting) {
               return Column(children: [
                 Padding(
                     padding: const EdgeInsets.only(bottom: 40),
@@ -265,7 +235,8 @@ class _APITableState extends State<APITable> {
                   padding: const EdgeInsets.only(bottom: 40),
                   child: Row(children: getTitle())),
               Center(
-                  child: Text('No ${titleState} on this Aircraft. Add the first one. ',
+                  child: Text(
+                      'No ${titleState} on this Aircraft. Add the first one. ',
                       style: dmTitle1))
             ]);
           } else {
