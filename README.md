@@ -1,16 +1,12 @@
-# admin
+# An admin portal UI for maintaining and validating data within Fieve-Level
 
-A new Flutter project.
+A Flutter app with:
+1. RESTFUL API connection
+2. Validation
+3. Nested models
+4. User roles
+5. Dart
+6. Docker
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![output](https://user-images.githubusercontent.com/71202372/112101303-a4edc080-8b63-11eb-9712-97a42599a66d.gif)
+![output](https://user-images.githubusercontent.com/71202372/112105405-986c6680-8b69-11eb-9c34-b60b4aff17e6.gif)
